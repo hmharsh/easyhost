@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<body>
+
+<div data-role="page" id="pageone">
+  <div data-role="header">
+    <h1>Dashboard</h1>
+  </div>
+  
+  <div data-role="main" class="ui-content">
+     <!-- <p>The "column toggle table" will hide columns when there is not enough width to display the data.</p>
+         <p>In this example we have used the well-known Northwind sample database. Below is a selection from the "Customers" table.</p>
+         <h4>Slowly resize the width of your browser window. The layout will adjust itself to fit the "new" width of the browser. OR, you can use the "Columns..." button to choose which column should be hidden or shown.</h4> -->
+    <table data-role="table" data-mode="columntoggle" class="ui-responsive" id="myTable">
+      <thead>
+        <tr>
+          <th data-priority="1">ip</th>
+          <th data-priority="2">Browser</th>
+          <th data-priority="3">Mobile</th>
+          <th data-priority="4">localIpv4</th>
+          <th data-priority="5">language</th>
+          <th data-priority="6">os</th>
+          <th data-priority="7">cookieEnabled</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Alfreds Futterkiste</td>
+          <td>Maria Anders</td>
+          <td>Obere Str. 57</td>
+          <td>Berlin</td>
+          <td>12209</td>
+          <td>Germany</td>
+        </tr>
+       
+
+      </tbody>
+    </table>
+  </div>
+
+  <div data-role="footer">
+    <h1>Footer Text</h1>
+  </div>
+</div> 
+
+
+
+<script type="text/javascript">
+  
+(function(){
+
+
+
+
+    $.getJSON("http://localhost:3000/visits/1508402038619", function(result){
+       
+    console.table(result)
+        $.each(result, function(i, field){
+
+        //  console.log(field)
+           $("tbody").append
+          ('<tr><td>'+field.ip+'</td><td>'+field.Browser+'</td></tr>');
+        });
+    });
+
+
+
+})()
+
+
+</script>
+</body>
+</html>

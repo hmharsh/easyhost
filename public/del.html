@@ -1,0 +1,50 @@
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<script src="jszip.min.js" ></script>
+<script type="text/javascript">
+function saveTextAsFile(content,filename)
+{
+    var textToWrite = content;
+    var textFileAsBlob = new Blob([textToWrite], {type:'application/octet-stream'});
+    var fileNameToSaveAs = filename;
+
+    var downloadLink = document.createElement("a");
+    downloadLink.download = fileNameToSaveAs;
+    downloadLink.innerHTML = "Download File";
+    if (window.webkitURL != null)
+    {
+        // Chrome allows the link to be clicked
+        // without actually adding it to the DOM.
+        downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+    }
+    else
+    {
+        // Firefox requires the link to be added to the DOM
+        // before it can be clicked.
+        downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+        downloadLink.onclick = destroyClickedElement;
+        downloadLink.style.display = "none";
+        document.body.appendChild(downloadLink);
+    }
+
+    downloadLink.click();
+}
+
+
+
+
+var zip = new JSZip();
+zip.file("Hello.txt", "Hello World\n");
+/*var img = zip.folder("images");
+img.file("smile.gif", imgData, {base64: true});*/
+zip.generateAsync({type:"blob"})
+.then(function(content) {
+    // see FileSaver.js
+    saveTextAsFile(content, "example.zip");
+});
+</script>
+</body>
+</html>

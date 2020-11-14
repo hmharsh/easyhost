@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Speech Detection</title>
+ <script
+  src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+  integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
+  crossorigin="anonymous"></script>
+</head>
+<body>
+<h1 align = "center" id = "responce"></h1>
+  <div class="words" contenteditable>
+  </div>
+<script>
+  var accessToken = "8a0375b6dede4a8198a568efa93458f6";
+  var baseUrl = "https://api.api.ai/v1/";
+  const msg = new SpeechSynthesisUtterance();
+  console.log(window.speechSynthesis.getVoices())
+  var say_it = function(txt){
+      msg.text = txt;
+     speechSynthesis.speak(msg);
+  }
+
+
+
+
+
+
+
+var myAction = function(data){
+alert(data.split(':'))
+}
+
+
+
+
+
+
+
+
+
+    function send(text) {
+      $.ajax({
+        type: "POST",
+        url: baseUrl + "query?v=20150910",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        headers: {
+          "Authorization": "Bearer " + accessToken
+        },
+        data: JSON.stringify({ query: text, lang: "en", sessionId: "somerandomthing" }),
+        success: function(data) {
+          myAction(JSON.stringify(data.result.fulfillment.speech, undefined, 2))
+          console.log("success")
+          console.log((JSON.stringify(data.result.fulfillment.speech, undefined, 2)))
+          say_it(JSON.stringify(data.result.fulfillment.speech, undefined, 2));
+        },
+        error: function() {
+          console.log("Internal Server Error");
+        }
+      });
+    }
+
+var action = function(str){
+    console.log(str)
+     send(str)
+/*    switch (true) {
+      case /(hey|hello)/gi.test(str):
+        say_it("thanks for looking at me")
+        break;
+      case /(reload|refresh)/gi.test(str):
+         location.reload();
+        break;
+       case /scroll.*top|top.*scroll/g.test(str):
+          say_it("moving scroll towords top")
+          window.location = '#'
+         break;
+       case /screen.*size|size.*screen/g.test(str):
+          say_it("your screen size is")
+         document.getElementById("responce").innerHTML = "height:"+window.screen.height.toString()+" ,Width:"+window.screen.width.toString();
+         // window.location = '#'
+         break;
+      case /(close|shutup|stop)/.test(str):
+      //window.open('','_self').close();
+       say_it("Closing now")
+        break;
+      case /play|song/ig.test(str):
+       say_it("Playing random music")
+        var myChild= window.open('/startrandom','','width=,height=,resizable=no');  
+        myChild.blur();
+        break;
+      default:
+      send(str)
+        break;
+    }*/
+}
+  window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recognition = new SpeechRecognition();
+  recognition.interimResults = true;
+  recognition.addEventListener('result', e => {
+    const transcript = Array.from(e.results)
+      .map(result => result[0])
+      .map(result => result.transcript)
+      .join('');
+      if (e.results[0].isFinal) {
+        action(transcript)
+     }
+  });
+  recognition.addEventListener('end', recognition.start);
+  recognition.start();
+</script>
+
+
+ 
+
+</body>
+</html>

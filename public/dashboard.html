@@ -1,0 +1,339 @@
+<html>
+
+<head>
+  <link rel="icon" type="image/png" href="icon.png">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+  <script src="https://js-tutorials.com/demos/angularjs_datatables_export_demo/jquery.dataTables.min.js"></script>
+  <script src="https://js-tutorials.com/demos/angularjs_datatables_export_demo/angular-datatables.min.js"></script>
+  <link rel="stylesheet" type="text/css"
+    href="https://js-tutorials.com/demos/angularjs_datatables_export_demo/datatables.bootstrap.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css">
+  <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.colVis.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+  <script
+    src="https://js-tutorials.com/demos/angularjs_datatables_export_demo/angular-datatables.buttons.min.js"></script>
+  <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+  <style type="text/css">
+    #reportrange {
+      display: none
+    }
+  </style>
+  <title>Dashboard</title>
+</head>
+<script type="text/javascript">
+  if (localStorage.getItem('token')) {
+    // Since verify is more time consuming as compare to localstorage existence check for 'token' adding saparate nested 'if'
+    $.ajax({
+      url: "/veriyfyToken",
+      type: "GET",
+      headers: { 'Authorization': localStorage.getItem('token') },
+    }).fail(function (jqXHR, textStatus, error) {
+      window.location = "/login.html"
+    });
+  } else {
+    window.location = "/login.html"
+  }
+
+  function blu() {
+    document.getElementById("todate").setAttribute("min", document.getElementById("fromdate").value);
+  }
+
+
+</script>
+
+<body ng-app="TestApp" ng-controller="testController">
+
+  <div class="container">
+    <br>
+    <div class="row">
+      <div class="col-md-12">
+        <div id="reportrange" class="pull-right"
+          style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+          <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+          <span></span> <b class="caret"></b>
+        </div>
+      </div>
+      <!--   <div class = "col-md-10">
+<input type = "button" class = "btn btn-default" value = "Refresh" ng-click = "refresh()"></botton >
+ <button type="button" id = "dow"  ng-click="SendData()" class="btn btn-default">Download csv</button>
+         
+</div> -->
+      <h3 ng-bind="info"></h3>
+    </div>
+
+
+
+    <!-- <h2><b>Visit summary of:</b> <a ng-href = {{names[0].url}}>{{names[0].url}}</a></h2><br> -->
+
+    <div class="col-sm-8">
+      <table class="table table-striped table-bordered" datatable="ng" dt-options="vm.dtOptions"
+        dt-instance="vm.dtInstance" width="100%" dt-column-defs="vm.dtColumnDefs">
+        <thead>
+          <tr>
+            <th>S. no</th>
+            <!-- <th>E-mail</th> -->
+            <th>Service type</th>
+            <!--  <th>Upload file name</th> -->
+            <th>Directory name(in server)</th>
+            <th>upload time</th>
+            <!--  <th>Last access</th> -->
+            <th>warning sent?</th>
+            <!--  <th>filesize(in MB)</th> -->
+            <!--  <th>last-update</th> -->
+            <!--  <th>website</th> -->
+            <th>Dashboard</th>
+            <th>Delete</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="x in names | filter : ftype">
+            <td>{{$index + 1}}</td>
+            <!--  <td>{{x.email}}</td> -->
+            <td>{{x.stype}}</td>
+            <!--  <td>{{x.zipFileName}}</td> -->
+            <td>{{x.uid}}</td>
+            <td>{{x.upload_time}}</td>
+            <!--  <td>{{fun(x.lastAccess)}}</td> -->
+            <td>{{x.warning}}</td>
+            <!-- <td>{{x.filesize}}</td> -->
+            <!--  <td>{{fun(x.lastupdate)}}</td> -->
+            <!--     <td > <a target = "_blank" ng-href =  http://easyhost.herokuapp.com/uploads/{{x.uid}}><i class="btn btn-info btn glyphicon glyphicon-share-alt"></a></td> -->
+
+            <td><a target="_blank" ng-href={{document.location.origin}}/table/{{x.secretKey}}><i
+                  class="btn btn-default btn glyphicon glyphicon-share-alt"></a></td>
+            <td><a ng-href={{document.location.origin}}/delete/{{x.secretKey}}><i
+                  class="btn btn-danger btn glyphicon glyphicon-trash"></a></td>
+
+
+
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</body>
+
+</html>
+<script>
+
+
+  angular.module('TestApp', ['TestApp.controllers', 'datatables', 'datatables.buttons']);
+
+  angular.module('TestApp.controllers', []).controller('testController', function ($scope, DTOptionsBuilder, DTColumnBuilder, DTColumnDefBuilder, $http, $window) {
+    $scope.refresh = function () {
+      $scope.info = "Please wait ..."
+      $scope.ftype = ""
+      //Script tag mailed
+      function convert(str) {
+        var date = new Date(str),
+          mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+          day = ("0" + date.getDate()).slice(-2);
+        return [date.getFullYear(), mnth, day].join("-");
+      }
+
+      // var p = {}
+      // p["fromdate"] = convert($('#reportrange').data('daterangepicker').startDate)
+      // p["todate"] = convert($('#reportrange').data('daterangepicker').endDate)
+      // var parameter = JSON.stringify(p);
+
+
+
+
+      $http({
+        method: 'GET', url: '/hosteditems', headers: {
+          'Authorization': localStorage.getItem('token')
+        }
+      }).success(function (response) {
+        if (response.length == 0) {
+          $scope.info = "No data available"
+
+        } else {
+          $scope.names = response;
+          $scope.info = ""
+        }
+      });
+
+    }
+
+
+
+
+
+
+
+
+    /*$scope.tim = function(x){
+      return parseInt(x.toLocaleDateString());
+    }
+    */
+    $scope.fun = function (x) { return (new Date(parseInt(x)).toUTCString()) }
+
+
+    //return new Date(x).toUTCString()
+    //  timestamp = x.toString().substring(0,8)
+    //return new Date( parseInt( timestamp, 16 ) * 1000 ).toString().split("G")[0].substring(3);
+
+    // return nowDate.getDate() +"/"+ nowDate.getMonth() + '/'+ nowDate.getFullYear();
+
+
+    //$scope.refresh();
+    $scope.vm = {};
+    $scope.vm.dtInstance = {};
+    // $scope.vm.dtColumnDefs = [DTColumnDefBuilder.newColumnDef(2).notSortable()];
+    $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+      .withOption('paging', true)
+      .withOption('searching', true)
+      .withOption('info', true)
+      .withOption('dom', 'Bfrtip')
+      .withOption('lengthMenu', [50, 100, 150, 200])
+      .withPaginationType('full_numbers')
+
+
+
+
+      .withButtons([
+        'colvis',
+        'copy',
+        'print',
+        'pdf',
+        {
+          extend: "csvHtml5",
+          fileName: "CustomFileName" + ".xlsx",
+          exportOptions: {
+            columns: ':visible'
+          },
+          exportData: { decodeEntities: true }
+        }
+
+
+
+        , {
+
+          extend: 'collection',
+          text: 'home visit info',
+          action: function () {
+            //$window.localStorage.removeItem('login');                          
+            window.location.assign("/homevisits.html")
+          },
+
+          fade: true
+
+        }
+
+
+
+
+
+
+
+
+
+
+        /*
+        ,{
+        
+              extend: 'collection',
+                    text: 'upload file info',
+                    action: function () { 
+                                            
+                       $scope.ftype = "File upload"
+          //Script tag mailed
+                     },
+                  
+                    fade: true
+                   
+                }
+        ,{
+        
+              extend: 'collection',
+                    text: 'script tag mail info',
+                    action: function () { 
+                     $scope.ftype = "Script tag"
+                     },
+                  
+                    fade: true
+                   
+                }   */
+
+
+
+
+
+        , {
+
+          extend: 'collection',
+          text: 'All visit info',
+          action: function () {
+            //$window.localStorage.removeItem('login');                          
+            window.location.assign("/allvisits.html")
+          },
+
+          fade: true
+
+        }
+
+
+        , {
+
+
+          extend: 'collection',
+          text: 'logout',
+          action: function () {
+            $window.localStorage.removeItem('token');
+            window.location.assign("/")
+          },
+
+          fade: true
+
+
+        }
+
+
+
+      ]);
+
+
+    $(function () {
+      //for daterange picker start code
+      var start = moment().subtract(29, 'days');
+      var end = moment().add(1, 'days');
+
+      function cb(start, end) {
+
+        setTimeout(function () {
+          $scope.refresh()
+        }, 800)
+        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+      }
+
+      $('#reportrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+        ranges: {
+          'Today': [moment(), moment().add(1, 'days')],
+          'Yesterday': [moment().subtract(1, 'days'), moment()],
+          'Last 7 Days': [moment().subtract(6, 'days'), moment().add(1, 'days')],
+          'Last 30 Days': [moment().subtract(29, 'days'), moment().add(1, 'days')],
+          'This Month': [moment().startOf('month'), moment().endOf('month').add(1, 'days')],
+          'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month').add(1, 'days')]
+        }
+      }, cb);
+
+      cb(start, end);
+
+    });
+
+
+
+  });
+</script>

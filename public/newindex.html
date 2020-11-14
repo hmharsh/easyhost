@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Easy host</title>
+  <link rel="icon" type="image/png"  href="icon.png">
+  <meta charset="UTF-8">
+  <meta name="description" content="host free file(s) and websites any apply analytics over it">
+  <meta name="keywords" content="Easy to upload, Easy to share, Easy to track!!
+  (host file get sharing link over mail and get access to dashboard to get result of visits over 50+ client machine related parameters)">
+  <meta name="author" content="Harshit Mahajan">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+  <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link href="stylesheets/styles.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="funnytext.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ <script type="text/javascript" src="funnytext.js"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-101489450-2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+     gtag('js', new Date());
+    gtag('config', 'UA-101489450-2');
+  </script>
+</head>
+<body align = "center">
+
+ 
+
+      <div id = "conte">
+        <h1 class="mySelector">Easy host</h1> 
+        <p>Easy to upload, Easy to share, Easy to track!!</p> 
+      </div>
+
+        <a href = "/demozip" >Download demo zip file</a>
+       <form action = "/issuecredentials" method = "post">
+        get custom credentials by email
+        <input type = "email" name = "mailId"></input>
+        <button value = "submit">Mail me</button>
+        </form>
+
+
+<!-- <div class="panel panel-default">
+  <div class="panel-body">
+    <span class="glyphicon glyphicon-cloud-upload"></span>
+    <h2>File Uploader</h2>
+    
+    <div class="progress">
+      <div class="progress-bar" role="progressbar"></div>
+    </div>
+    <button class="btn btn-lg upload-btn" type="button">Upload File</button>
+  </div>
+</div>  -->
+    
+
+<div class = "file-well">
+  <input id="upload-input" type="file" name="uploads[]" multiple="multiple"></br>
+</div>
+
+
+Drag zip File in cloud above to host
+  <br>
+File size must less than 5MB
+
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <input type = "hidden" id = "filesize" name = "filesize"/>
+    <input type = "hidden" id = "lastupdate" name = "filelastupdate"/>
+     <input id="email" name = "mailId" required type="email" class="form-control" name="email" placeholder="Your Email">    
+    <button type='submit' class="btn btn-primary">Upload and get hosting link via mail</button>
+<br>
+  </div>
+</div>
+
+
+
+  <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="javascripts/upload.js"></script>
+  <script src="javascripts/jszip.min.js" ></script>
+</body>
+</html>

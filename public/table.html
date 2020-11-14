@@ -1,0 +1,482 @@
+<html>
+
+<head>
+  <link rel="icon" type="image/png" href="icon.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+  <script src="https://js-tutorials.com/demos/angularjs_datatables_export_demo/jquery.dataTables.min.js"></script>
+  <script src="https://js-tutorials.com/demos/angularjs_datatables_export_demo/angular-datatables.min.js"></script>
+  <link rel="stylesheet" type="text/css"
+    href="https://js-tutorials.com/demos/angularjs_datatables_export_demo/datatables.bootstrap.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css">
+  <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.colVis.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+  <script
+    src="https://js-tutorials.com/demos/angularjs_datatables_export_demo/angular-datatables.buttons.min.js"></script>
+  <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+  <title>Dashboard</title>
+  <style type="text/css">
+    #hid {
+      display: none;
+    }
+  </style>
+</head>
+<script type="text/javascript">
+
+
+  function blu() {
+    document.getElementById("todate").setAttribute("min", document.getElementById("fromdate").value);
+  }
+
+
+  function deleteitem() {
+    var retVal = confirm("Are you sure you want to delete?");
+    if (retVal == true) {
+      //document.write ("User wants to continue!");
+      window.location = "http://easyhost.herokuapp.com/delete/" + window.location.hash.toString().replace("#", "")
+      //  http/delete/1510513461160
+      return true;
+    }
+    else {
+      document.write("User does not want to continue!");
+      return false;
+    }
+  }
+  $(document).ready(function () {
+
+
+
+
+    document.getElementById("pr").innerHTML = "To Access this data in json formate by your application, Send a get request with access token to : " + document.location.origin + "/visits/" + window.location.hash.replace("#", "");
+    /*$('#mydiv').data('myval',20); //setter*/
+    /*
+    Access this data in json formate by your application
+      Send a get request to : easyhost.herokuapp.com/visits/*/
+
+  })
+
+</script>
+
+<body ng-app="TestApp" ng-controller="testController">
+
+  <div class="container">
+    <br>
+    <div id="hid" class="row">
+      <div class="col-md-12">
+        <div id="reportrange" class="pull-right"
+          style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+          <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+          <span></span> <b class="caret"></b>
+        </div>
+      </div>
+      <!--   <div class = "col-md-10">
+<input type = "button" class = "btn btn-default" value = "Refresh" ng-click = "refresh()"></botton >
+ <button type="button" id = "dow"  ng-click="SendData()" class="btn btn-default">Download csv</button>
+         
+</div> -->
+      <h3 ng-bind="info"></h3>
+    </div>
+
+
+
+    <!-- <h2><b>Visit summary of:</b> <a ng-href = {{names[0].url}}>{{names[0].url}}</a></h2><br> -->
+
+
+
+    <pre id="pr">
+harshit
+</pre>
+    <div class="row">
+      <h1 align="center"><b id="loading_message">Loading...</b></h1>
+    </div>
+    <div class="col-sm-8" id="main_table">
+      <table class="table table-striped table-bordered" datatable="ng" dt-options="vm.dtOptions"
+        dt-instance="vm.dtInstance" width="100%" dt-column-defs="vm.dtColumnDefs">
+        <thead>
+          <tr>
+            <th>S. no</th>
+            <th class="clientSideTime">client Time and date</th>
+            <th class="serverSideTime">Server Time</th>
+            <th class="language">Language</th>
+            <th class="cookieEnabled">Cookie enabled</th>
+            <th class="applicationName">Application name</th>
+            <th class="applicationCodeName">Application coden ame</th>
+            <th class="browserEngine">Browser engine</th>
+            <th class="windowWidth">Window width</th>
+            <th class="windowHeight">Window height</th>
+            <th class="colorDepth">Color depth</th>
+            <th class="pixelDepth">pixelDepth</th>
+            <th class="screenWidth">screenWidth</th>
+            <th class="screenHeight">screenHeight</th>
+            <th class="availableWidth">availableWidth</th>
+            <th class="availableHeight">availableHeight</th>
+            <!--  <th class = "url">url</th> -->
+            <th class="os">os</th>
+            <th class="Browser">Browser</th>
+            <th class="Mobile">Mobile</th>
+            <!--  <th class = "Flash">Flash</th> -->
+            <th class="fullUserAgent">fullUserAgent</th>
+            <th class="hardwareConcurrency">hardwareConcurrency</th>
+            <th class="maxTouchPoints">maxTouchPoints</th>
+            <th class="zoomLevel">zoomLevel</th>
+            <th class="supportFullCss3">supportFullCss3</th>
+            <th class="referrer">referrer</th>
+            <th class="previousSites">previousSites</th>
+            <th class="javaEnabled">javaEnabled</th>
+            <th class="isOnline">isOnline</th>
+            <th class="networkEffectiveType">networkEffectiveType</th>
+            <th class="isLocalStorageAvailable">isLocalStorageAvailable</th>
+            <th class="jsHeapSizeLimit">jsHeapSizeLimit</th>
+            <th class="totalJSHeapSize">totalJSHeapSize</th>
+            <th class="usedJSHeapSize">usedJSHeapSize</th>
+            <th class="domainLookupTimeInMs">domainLookupTimeInMs</th>
+            <th class="loadTimeTimeInMs">loadTimeTimeInMs</th>
+            <th class="domContentLoadTimeInMs">domContentLoadTimeInMs</th>
+            <th class="localIpv4">localIpv4</th>
+            <th class="RENDERER">RENDERER</th>
+            <th class="VENDOR">VENDOR</th>
+            <th class="Graphics">Graphics</th>
+            <th class="ip">public ip</th>
+            <!-- <th class = "region">region</th> -->
+            <th class="org">Organization</th>
+            <!--  <th class = "asn">asn</th> -->
+
+            <th class="country_name">country_name</th>
+
+
+            <th class="Connect end time">Connect end time</th>
+            <th class="Connect start time">Connect start time</th>
+            <th class="Dom Loading">Dom Loading</th>
+            <th class="Domain Lookup End">Domain Lookup End</th>
+            <th class="domain Lookup Start">Domain Lookup Start</th>
+            <th class="Fetch Start">Fetch Start</th>
+            <!--  <th class = "loadEventEnd">load Event End</th>
+                                       <th class = "load Event Start">load Event Start</th> -->
+
+
+            <th class="navigationStart">Navigation Start</th>
+            <!-- <th class = "redirectEnd">Redirect End</th> -->
+            <!--  <th class = "redirectStart">Redirect start</th>-->
+            <th class="requestStart">Request Start</th>
+
+
+            <th class="responseEnd">Response End</th>
+            <th class="responseStart">Response Start</th>
+
+
+            <th class="remoteAddress">Remote Address</th>
+            <th class="remotePort">Remote Port</th>
+            <th class="localAddress">Local Address</th>
+            <th class="localPort">Local Port</th>
+
+
+
+
+
+
+
+
+
+          </tr>
+
+
+
+
+
+
+          <!-- 0
+redirectStart
+:
+0
+requestStart
+:
+1509123447019
+responseEnd
+:
+1509123447676
+responseStart
+:
+1509123447401
+secureConnectionStart
+:
+1509123446908
+unloadEventEnd
+:
+0
+unloadEventStart
+:
+0 -->
+
+
+
+
+        </thead>
+        <tbody>
+          <tr ng-repeat="x in names">
+            <td>{{$index + 1}}</td>
+            <td class="clientSideTime">{{ x.clientSideTime}}</td>
+            <td class="serverSideTime">{{x.stime}}</td>
+            <td class="language">{{ x.language}}</td>
+            <td class="cookieEnabled">{{ x.cookieEnabled}}</td>
+            <td class="applicationName">{{ x.applicationName}}</td>
+            <td class="applicationCodeName">{{ x.applicationCodeName}}</td>
+            <td class="browserEngine">{{ x.browserEngine}}</td>
+            <td class="windowWidth">{{ x.windowWidth}}</td>
+            <td class="windowHeight">{{ x.windowHeight}}</td>
+            <td class="colorDepth">{{ x.colorDepth}}</td>
+            <td class="pixelDepth">{{ x.pixelDepth}}</td>
+            <td class="screenWidth">{{ x.screenWidth}}</td>
+            <!-- -->
+            <td class="screenHeight">{{ x.screenHeight}}</td>
+            <td class="availableWidth">{{ x.availableWidth}}</td>
+            <td class="availableHeight">{{ x.availableHeight}}</td>
+            <!--   <td class = "url">{{ x.url}}</td> -->
+            <td class="os">{{ x.os}}</td>
+            <td class="Browser">{{ x.Browser}}</td>
+            <td class="Mobile">{{ x.Mobile}}</td>
+            <!-- <td class = "Flash">{{ x.Flash}}</td> -->
+            <td class="fullUserAgent">{{ x.fullUserAgent}}</td>
+            <td class="hardwareConcurrency">{{ x.hardwareConcurrency}}</td>
+            <td class="maxTouchPoints">{{ x.maxTouchPoints}}</td>
+            <td class="zoomLevel">{{ x.zoomLevel}}</td>
+            <td class="supportFullCss3">{{ x.supportFullCss3}}</td>
+            <td class="referrer">{{ x.referrer}}</td>
+            <td class="previousSites">{{ x.previousSites}}</td>
+            <td class="javaEnabled">{{ x.javaEnabled}}</td>
+            <td class="isOnline">{{ x.isOnline}}</td>
+            <td class="networkEffectiveType">{{ x.networkEffectiveType}}</td>
+            <td class="isLocalStorageAvailable">{{ x.isLocalStorageAvailable}}</td>
+            <td class="jsHeapSizeLimit">{{ x.jsHeapSizeLimit}}</td>
+            <td class="totalJSHeapSize">{{ x.totalJSHeapSize}}</td>
+            <td class="usedJSHeapSize">{{ x.usedJSHeapSize}}</td>
+            <td class="domainLookupTimeInMs">{{ x.domainLookupTimeInMs}}</td>
+            <td class="loadTimeTimeInMs">{{ x.loadTimeTimeInMs}}</td>
+            <td class="domContentLoadTimeInMs">{{ x.domContentLoadTimeInMs}}</td>
+
+            <td class="localIpv4">{{ x.localIpv4}}</td>
+            <td class="RENDERER">{{ x.RENDERER}}</td>
+            <td class="VENDOR">{{ x.VENDOR}}</td>
+            <td class="Graphics">{{ x.Graphics}}</td>
+            <td class="ip">{{ x.ip}}</td>
+            <!--   <td class = "region">{{ x.region}}</td> -->
+            <td class="org">{{ x.org}}</td>
+            <!--   <td class = "asn">{{ x.asn}}</td> -->
+            <td class="country_name">{{ x.country_name}}</td>
+
+            <!--  <td class = "domContentLoadedEventEnd">{{fun(x.domContentLoadedEventEnd)}}</td>
+                                      <td class = "domContentLoadedEventStart">{{fun(x.domContentLoadedEventStart)}}</td> -->
+            <td class="connectEnd">{{x.connectEnd}}</td>
+            <td class="connectStart">{{x.connectStart}}</td>
+            <td class="domLoading">{{x.domLoading}}</td>
+            <td class="domainLookupEnd">{{x.domainLookupEnd}}</td>
+            <td class="domainLookupStart">{{x.domainLookupStart}}</td>
+
+            <td class="fetchStart">{{x.fetchStart}}</td>
+            <!--       <td class = "load Event End">{{fun(x.loadEventEnd)}}</td>
+                                <td class = "load Event Start">{{fun(x.loadEventStart)}}</td> -->
+            <td class="navigationStart">{{x.navigationStart}}</td>
+            <!-- <td class = "redirectEnd">{{x.redirectEnd}}</td>
+                                      <td class = "redirectStart">{{x.redirectStart}}</td>-->
+            <td class="requestStart">{{x.requestStart}}</td>
+
+            <td class="responseEnd">{{x.responseEnd}}</td>
+            <td class="responseStart">{{x.responseStart}}</td>
+
+            <td class="remoteAddress">{{x.remoteAddress}}</td>
+            <td class="remotePort">{{x.remotePort}}</td>
+            <td class="localAddress">{{x.localAddress}}</td>
+            <td class="localPort">{{x.localPort}}</td>
+
+
+
+            <!--  <td class = "isProxy">{{x.isProxy}}</td>
+                                      -->
+
+
+            <!--  <td><div class="btn-group">
+               <button type="button" class="btn btn-default btn" ng-click="edit($index);"><i class="glyphicon glyphicon-pencil"></i></button>  
+               <button type="button" class="btn btn-default btn" ng-click="delete();"><i class="glyphicon glyphicon-trash"></i></button> 
+           </div></td> -->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</body>
+
+</html>
+<script>
+
+  $("#main_table").hide()
+  $("#loading_message").show()
+  angular.module('TestApp', ['TestApp.controllers', 'datatables', 'datatables.buttons']);
+
+  angular.module('TestApp.controllers', []).controller('testController', function ($scope, DTOptionsBuilder, DTColumnBuilder, DTColumnDefBuilder, $http) {
+    $scope.refresh = function () {
+      $scope.info = "Please wait ..."
+      function convert(str) {
+        var date = new Date(str),
+          mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+          day = ("0" + date.getDate()).slice(-2);
+        return [date.getFullYear(), mnth, day].join("-");
+      }
+
+      var p = {}
+      p["fromdate"] = convert($('#reportrange').data('daterangepicker').startDate)
+      p["todate"] = convert($('#reportrange').data('daterangepicker').endDate)
+      var parameter = JSON.stringify(p);
+
+
+      if (window.location.hash.toString().split('#')[1]) {
+        $("#main_table").hide()
+        $http.get("/visits/" + window.location.hash.toString().split('#')[1].toString())
+          .success(function (response)
+          //1508930321015
+          {
+            //console.log(response)
+            if (response.length == 0) {
+              $scope.info = "No data available"
+              $("#main_table").hide()
+              $("#loading_message").html("No data available")
+              $("#loading_message").show()
+
+            } else {
+              $("#main_table").show()
+              $scope.names = response;
+              $scope.info = ""
+              $("#loading_message").hide()
+            }
+
+
+          })
+
+          .error(function (response) {
+            $("#main_table").hide()
+            $("#loading_message").html("No data available")
+            $("#loading_message").show()
+            //alert("No data available")
+          })
+
+      } else {
+        //alert("Please Enter valid url")
+        $("#main_table").hide()
+        $("#loading_message").html("Enter a valid url")
+        $("#loading_message").show()
+        //alert("Enter a valid url")
+      }
+
+
+    }
+
+
+
+
+
+
+
+    $scope.dateFromObjectId = function (objectId) {
+      return new Date(parseInt(objectId.substring(0, 8), 16) * 1000);
+    };
+
+    $scope.fun = function (x) { return (new Date(parseInt(x)).toUTCString()) }
+
+
+
+
+    //$scope.refresh();
+    $scope.vm = {};
+    $scope.vm.dtInstance = {};
+    // $scope.vm.dtColumnDefs = [DTColumnDefBuilder.newColumnDef(2).notSortable()];
+    $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+      .withOption('paging', true)
+      .withOption('searching', true)
+      .withOption('info', true)
+      .withOption('dom', 'Bfrtip')
+      .withOption('lengthMenu', [50, 100, 150, 200])
+      .withPaginationType('full_numbers')
+
+
+
+
+      .withButtons([
+        'colvis',
+        'copy',
+        'print',
+        'pdf',
+        {
+          extend: "csvHtml5",
+          fileName: "CustomFileName" + ".xlsx",
+          exportOptions: {
+            columns: ':visible'
+          },
+          exportData: { decodeEntities: true }
+        },
+        {
+
+          extend: 'collection',
+          text: 'Delete',
+          action: function () {
+            //$window.localStorage.removeItem('login');                          
+            deleteitem()
+          },
+
+          fade: true
+
+        }
+
+
+
+    /*,{
+            extend: 'collection',
+            text: 'Flag',
+            buttons: [
+                { text: 'High priority',   action: function () {  } },
+                { text: 'Medium priority', action: function () {  } },
+                { text: 'Low priority',    action: function () {  } }
+            ],
+            fade: true
+        }*/]);
+
+
+    $(function () {
+      //for daterange picker start code
+      var start = moment().subtract(29, 'days');
+      var end = moment().add(1, 'days');
+
+      function cb(start, end) {
+
+        setTimeout(function () {
+          $scope.refresh()
+        }, 800)
+        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+      }
+
+      $('#reportrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+        ranges: {
+          'Today': [moment(), moment().add(1, 'days')],
+          'Yesterday': [moment().subtract(1, 'days'), moment()],
+          'Last 7 Days': [moment().subtract(6, 'days'), moment().add(1, 'days')],
+          'Last 30 Days': [moment().subtract(29, 'days'), moment().add(1, 'days')],
+          'This Month': [moment().startOf('month'), moment().endOf('month').add(1, 'days')],
+          'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month').add(1, 'days')]
+        }
+      }, cb);
+
+      cb(start, end);
+
+    });
+
+
+
+  });
+</script>

@@ -1,0 +1,32 @@
+<html>
+<head>
+  <title>File-upload</title>
+</head>
+<body>
+
+
+  <script type="text/javascript">
+
+
+
+$("form#data").submit(function() {
+  alert("hi")
+    var formData = new FormData($(this)[0]);
+    $.post($(this).attr("/upload"), formData, function() {
+        // success    
+        alert("hi")
+    });
+    return false;
+});
+
+
+
+  </script>
+<form ref='uploadForm' id = "data"  encType="multipart/form-data" method = "post" >
+  <input type = "email" name = "mailId" value = "hmharsh3@gmail.com" required></email>
+  <input type = "file" name = "file"  accept=".zip"  ></input>
+   <button>Submit</button>
+  <!-- <input type = "submit" value = "submit"></input> -->
+</form>
+</body>
+</html>
