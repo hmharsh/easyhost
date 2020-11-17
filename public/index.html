@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="javascripts/jszip.min.js"></script>
   <link href="https://fonts.googleapis.com/css?family=Vollkorn+SC" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="funnytext.css" />
   <script type="text/javascript" src="funnytext.js"></script>
@@ -156,11 +157,14 @@ $('#custom').modal('show');">Track your own website with Easyhost</button>
             <hr>
             <input type="hidden" id="filesize" name="filesize" />
             <input type="hidden" id="lastupdate" name="filelastupdate" />
-            <input id="secret" value="" name="secret" type="password" class="form-control"
-              placeholder="Set file share secret">
+            <input type="checkbox" id="isSecret" name="isSecret" value="isSecret">
+            <p id="isSecretChkBox">Secure by
+              password</p>
+            <input id="secret" value="" name="secret" type="hidden" class="form-control"
+              placeholder="Set file share password">
             <label id="secretValidator"></label><br>
-            <label title="show/hide password" onmouseover="showPassword()"
-              onmouseout="showPassword()">👁</label></br></br>
+            <label title="show/hide password" style="display: none;" onmouseover="showPassword()"
+              onmouseout="showPassword()" id="eye">👁</label></br></br>
 
 
             <input type='button' class="btn btn-primary" id="uploadBtn" value="upload"></input><br>
@@ -197,6 +201,35 @@ $('#custom').modal('show');">Track your own website with Easyhost</button>
     </div>
   </div>
   <script type="text/javascript">
+
+
+    $("#isSecret").click(function () {
+      if ($('#isSecret').is(':checked')) {
+        $('#secret').attr('type', "password");
+        $('#eye').show()
+        $("#secret").val("")
+      } else {
+        $('#secret').attr('type', "hidden");
+        $('#eye').hide()
+        $("#secret").val("")
+      }
+    });
+
+    $("#isSecretChkBox").click(function () {
+      if ($('#isSecret').is(':checked')) {
+        $('#isSecret').prop('checked', false);
+        $('#secret').attr('type', "hidden");
+        $('#eye').hide()
+        $("#secret").val("")
+      } else {
+        $('#secret').attr('type', "password");
+        $('#eye').show()
+        $("#secret").val("")
+        $('#isSecret').prop('checked', true);
+      }
+    });
+
+
     function showPassword() {
       var x = document.getElementById("secret");
       if (x.type === "password") {
@@ -245,7 +278,10 @@ $('#custom').modal('show');">Track your own website with Easyhost</button>
         $('#lastupdate').val(this.files[0].lastModified)
         $('.filename').html(this.files[0].name)
         jQuery.noConflict();
-        $("#secret").val("")
+        // $('#secret').attr('type', "hidden");
+        // $('#eye').hide()
+        // $("#secret").val("")
+        $('#isSecret').prop('checked', false);
         $("#uploadBtn").show()
         $('.progress-bar').html('');
         $('.progress-bar').text(0 + '%');
@@ -288,7 +324,11 @@ $('#custom').modal('show');">Track your own website with Easyhost</button>
         downloadLink.click();
       }
       $('#uploadBtn').on('click', function (evt) {
-        if ($('#secret').val().length < 6) {
+
+        $('#secretValidator').html("")
+        $('#isSecret').prop('checked', false);
+
+        if (($('#isSecret').is(':checked')) && ($('#secret').val().length < 6)) {
           $('#secretValidator').html("secret must contain atleast 6 chracters")
         }
         else {
@@ -307,13 +347,15 @@ $('#custom').modal('show');">Track your own website with Easyhost</button>
               zip.generateAsync({ type: "blob" })
                 .then(function (con) {
                   var formData = new FormData();
-                  if (files.length == 1 && files[0].name.split(".")[1] == "zip") {
-                    formData.append('uploads[]', files[0], files[0].name);
+                  // if (files.length == 1 && files[0].name.split(".")[1] == "zip") {
+                  //   formData.append('uploads[]', files[0], files[0].name);
+                  // }
+                  // else {
+                  formData.append('uploads[]', con, "filename.zip");
+                  // }
+                  if ($('#isSecret').val()) {
+                    formData.append('secret', $("#secret").val())
                   }
-                  else {
-                    formData.append('uploads[]', con, "filename.zip");
-                  }
-                  formData.append('secret', $("#secret").val())
                   formData.append('visiterId', localStorage.getItem('visitId'))
                   $.ajax({
                     url: '/uploadfile',
@@ -350,14 +392,16 @@ $('#custom').modal('show');">Track your own website with Easyhost</button>
         }
       });
     });
+
+
   </script>
-  <script src="commancript.js"></script>
+  <script src="commancript.js"></script> -->
   <script type="text/javascript">
     if (userdata.Mobile) {
       alert("For better user experience use desktop!!")
     }
   </script>
-  <script src="javascripts/jszip.min.js"></script>
+
 
 </body>
 

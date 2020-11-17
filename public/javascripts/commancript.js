@@ -69,7 +69,7 @@
 	}*/
 
 	// setting unique id
-	var expactedUID = window.location.href.split('#')[1]
+	var expactedUID = window.location.href.split('#')[1];
 	if (isValidUid(expactedUID)) {
 		userdata.uid = expactedUID
 	}
@@ -86,7 +86,7 @@
 		if (!data) {
 			return false
 		}
-		if (data.toString().length == 13 && /^\d+$/.test(data)) {
+		if ((data.toString().length == 13 || data.toString().length == 14) && /^\d+$/.test(data)) {
 			return true
 		}
 		else {

@@ -2,7 +2,6 @@
 
   // importing jquery
 
-
   var imported = document.createElement('script');
   //imported.src = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"
 

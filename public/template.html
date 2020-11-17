@@ -1,66 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-      <link rel="icon" 
-      type="image/png" 
-      href="icon.png">
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>File Browser</title>
-    <link rel="stylesheet" href="/lib/bootstrap.min.css">
-    <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/lib/app.css">
-    <style type="text/css">
 
-    </style>
-  </head>
-  <body>
-     <br>
-     <br>
-        <br>
-   <div class="panel panel-default mainpanel">
-           <div class="panel-heading">
-                
-                   <span class="up">
-                    <i class="fa fa-level-up"></i> Up
-                   </span> 
+<head>
+  <link rel="icon" type="image/png" href="icon.png">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>File Browser</title>
+  <link rel="stylesheet" href="/lib/bootstrap.min.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/app.css">
+  <style type="text/css">
+    /* The Modal (background) */
+    .modal {
+      display: none;
+      /* Hidden by default */
+      position: fixed;
+      /* Stay in place */
+      z-index: 1;
+      /* Sit on top */
+      padding-top: 100px;
+      /* Location of the box */
+      left: 0;
+      top: 0;
+      width: 100%;
+      /* Full width */
+      height: 100%;
+      /* Full height */
+      overflow: auto;
+      /* Enable scroll if needed */
+      background-color: rgb(0, 0, 0);
+      /* Fallback color */
+      background-color: rgba(0, 0, 0, 0.4);
+      /* Black w/ opacity */
+    }
 
-                   <span class="download">
-                    <i class="fa fa-level-up"></i> Download
-                   </span> 
+    /* Modal Content */
+    .modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+    }
 
+    /* The Close Button */
+    .close {
+      color: #aaaaaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
 
-                  <!--  <span class="download">
-                   <i class="fa fa-download"</i> Download></a> 
-                  </span>  -->
+    .close:hover,
+    .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
 
-<!-- <a href = "/download/"+window.location.hash.replace("#","").toString()> -->
-               
-                  
-                  
-           </div>
-      <div class="panel-body">
-              <table class="linksholder">
-              </table>
-      </div>
+<body>
+  <div id="myModal" class="modal">
 
-  </div> 
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <p>Enter password:</p>
+      <input type="password" id="secret"><br>
+      <label id="secretValidator"></label><br>
+      <input type="button" id="submit" value="submit">
+    </div>
 
-    <script src="/lib/jquery.min.js"></script>
-     <script src="/javascripts/commancript.js"></script>
-    <script src="/lib/bootstrap.min.js"></script>
-    <script src="/lib/datatable/js/jquery.datatables.min.js"></script>
-    <script src="/lib/app.js"></script>
+  </div>
+  <br>
+  <br>
+  <br>
+  <div class="panel panel-default mainpanel">
+    <div class="panel-heading">
+
+      <!-- <span class="up">
+        <i class="fa fa-level-up"></i> Up
+      </span> -->
+
+      <span class="download">
+        <i class="fa fa-level-up"></i> Download
+      </span>
+
+    </div>
+    <div class="panel-body">
+      <table class="linksholder">
+      </table>
+    </div>
+
+  </div>
+
+  <script src="/lib/jquery.min.js"></script>
+  <script src="/javascripts/commancript.js"></script>
+  <script src="/lib/bootstrap.min.js"></script>
+  <script src="/lib/datatable/js/jquery.datatables.min.js"></script>
+  <script src="/lib/app.js"></script>
 
 
   <script type="text/javascript">
-  $(".download").click(function(){
-    /*$.get("/download/"+window.location.hash.replace("#","").toString(),function(){
-      alert("downloading...")
-    });*/
-  window.location = "/download/"+window.location.hash.replace("#","").toString()
-  })
+    $(".download").click(function () {
+      /*$.get("/download/"+window.location.hash.replace("#","").toString(),function(){
+        alert("downloading...")
+      });*/
+      window.location = "/download/" + window.location.hash.replace("#", "").toString()
+    })
   </script>
-  </body>
+</body>
+
 </html>

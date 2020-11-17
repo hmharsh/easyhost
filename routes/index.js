@@ -117,7 +117,6 @@ router.get('/visits/:id', function (req, res) {
       collection.find({ 'secretKey': req.params.id }, { 'uid': 1 }).toArray(function (err, docs) {
         if (err) throw err;
         if (docs.length > 0) {
-          console.log(docs[0].uid)
           data(docs[0].uid)
           tim = docs[0].uid
         } else {
@@ -133,26 +132,57 @@ router.get('/visits/:id', function (req, res) {
   }
 });
 
-router.get('/files/:id', function (req, res) {
-  // Add dir deletion feature after 5 min of unzip
+router.post('/files/:id', function (req, res) {
+  let password = req.headers['secret'] || ''; // Express headers are auto converted to lowercase
   var dirpath = path('public', 'uploads', req.params.id)
-  //Extract ZIP file, of already not extracted
-  fs.access(dirpath, function (err) {
-    if (err && err.code === 'ENOENT') {
-      mkdirp(path("public", "uploads", req.params.id), function (e) {
-        let stream = fs.createReadStream(dirpath + '.zip').pipe(unzip.Extract({ path: dirpath }));
-        // Wait till zip get file extracted
-        stream.on('close', () => {
-          setTimeout(function () {
-            rimraf(dirpath, function () { console.log("data directory cleaned up, path: " + dirpath); })
-          }, config.storeExtractedFileTime);
-          serveFiles()
-        });
-      })
-    } else {
-      serveFiles()
-    }
+
+  MongoClient.connect(config.mongoURL, function (err, db) {
+    if (err) throw err;
+    var collection = db.collection('hosteditem');
+    collection.find({ 'uid': req.params.id, 'stype': 'File hosting' }, { 'accessSecret': 1 }).toArray(function (err, docs) {
+      if (err) throw err;
+      if ("accessSecret" in docs[0]) {
+        if (password == "") {
+          res.send(410)
+        } else {
+          if (docs[0].accessSecret == password) {
+            checkFileAvailability()
+          } else {
+            res.send(410)
+          }
+        }
+
+      } else {
+        checkFileAvailability()
+      }
+      db.close();
+
+    });
   });
+
+
+
+  function checkFileAvailability() {
+    // Add dir deletion feature after 5 min of unzip
+
+    //Extract ZIP file, of already not extracted
+    fs.access(dirpath, function (err) {
+      if (err && err.code === 'ENOENT') {
+        mkdirp(path("public", "uploads", req.params.id), function (e) {
+          let stream = fs.createReadStream(dirpath + '.zip').pipe(unzip.Extract({ path: dirpath }));
+          // Wait till zip get file extracted
+          stream.on('close', () => {
+            setTimeout(function () {
+              rimraf(dirpath, function () { console.log("data directory cleaned up, path: " + dirpath); })
+            }, config.storeExtractedFileTime);
+            serveFiles()
+          });
+        })
+      } else {
+        serveFiles()
+      }
+    });
+  }
 
   function serveFiles() {
     if (!dir.match(/public/)) {
@@ -190,6 +220,24 @@ router.get('/files/:id', function (req, res) {
     });
   }
 });
+
+router.post('/files/requiresecret/:id', function (req, res) {
+  var requestData = {};
+  MongoClient.connect(config.mongoURL, function (err, db) {
+    if (err) throw err;
+    var collection = db.collection('hosteditem');
+    collection.find({ 'uid': req.params.id, 'stype': 'File hosting' }, { 'accessSecret': 1 }).toArray(function (err, docs) {
+      if (err) throw err;
+      if ("accessSecret" in docs[0]) {
+        requestData.isSecretRequired = true
+      } else {
+        requestData.isSecretRequired = false
+      }
+      db.close();
+      res.send(requestData)
+    });
+  });
+})
 
 // router.get('/files', function (req, res) {
 //   try {
@@ -229,15 +277,16 @@ router.get('/files/:id', function (req, res) {
 // });
 
 router.post('/issuecredentials', function (req, res, next) {
-  var time = Date.now()
+  var time = Date.now().toString()
+  uid = lib.generateUID(time);
   var source = req.headers.referrer || req.headers.referer
   var hdata = {};
   var secretKey = md5(time + config.secret);
   hdata.private_dashboard_link = source + "table/" + secretKey
-  scriptTag = "&lt;script src='" + source + "javascripts/commancript.js?id=" + time.toString() + "''&gt;&lt;/script&gt;"
+  scriptTag = "&lt;script src='" + source + "javascripts/commancript.js?id=" + uid + "''&gt;&lt;/script&gt;"
   res.send(hdata.private_dashboard_link.toString() + '+' + scriptTag)
   var data = {};
-  data.uid = time.toString();
+  data.uid = uid;
   data.secretKey = secretKey.toString();
   data.upload_time = Date();
   data.visiterId = req.body.visiterId
@@ -306,7 +355,7 @@ router.post('/homevisits', function (req, res) {
       ]).toArray(function (err, docss) {
         if (err) throw err;
         if (docss.length < 1) {
-          req.body.uid = Date.now().toString()
+          req.body.uid = lib.generateUID(Date.now().toString())
           collcetion.insertOne(req.body, function (eerr, rres) {
             if (eerr) throw eerr;
             console.log('Inserted info about -> ' + req.body.url + ' successfully!! with uid: ' + req.body.uid);
@@ -375,7 +424,6 @@ router.post('/visiterInfo', function (req, res) {
   }
 });
 
-//////////// --> Marker
 router.get('/delete/:id', function (req, res, next) {
   // Fetch the UID of the stored data using supplied secret key
   MongoClient.connect(config.mongoURL, function (err, db) {
@@ -384,7 +432,6 @@ router.get('/delete/:id', function (req, res, next) {
     collection.find({ 'secretKey': req.params.id }, { 'uid': 1, 'stype': 1 }).toArray(function (err, docs) {
       if (err) throw err;
       if (docs.length > 0) {
-        console.log(docs[0])
         dat(docs[0])
         tim = docs[0].uid
       } else {
@@ -428,10 +475,11 @@ router.post('/uploadfile', function (req, res) {
     form.multiples = true;
     form.uploadDir = pathh.join(__dirname, '../public', '/uploads');
     var time = Date.now().toString()
+    var uid = lib.generateUID(time)
     var secretKey = md5(time + config.secret);
     var source = req.headers.referrer || req.headers.referer
     form.on('file', function (field, file) {
-      fs.renameSync(file.path, pathh.join(form.uploadDir, time + ".zip"));
+      fs.renameSync(file.path, pathh.join(form.uploadDir, uid + ".zip"));
     });
     form.on('field', function (name, value) {
       formData[name] = value
@@ -441,15 +489,18 @@ router.post('/uploadfile', function (req, res) {
     });
     form.on('end', function () {
       var hdata = {}; // hosting data
-      hdata.public_link = source + "uploads/" + time
+      hdata.public_link = source + "uploads/" + uid
       hdata.private_dashboard_link = source + "table/" + secretKey
       hdata.direct_link_to_delete_all = source + "delete/" + secretKey
       var data = {};
-      data.uid = time;
+      data.uid = uid;
       data.lastAccess = lib.objectIdWithTimestamp(Date.now());
       data.secretKey = secretKey.toString();
       data.upload_time = Date();
-      data.accessSecret = formData.secret
+      if ("secret" in formData && formData.secret != '') {
+        console.log("here")
+        data.accessSecret = md5(formData.secret)
+      }
       data.visiterId = formData.visiterId
       data.stype = "File hosting"
       MongoClient.connect(config.mongoURL, function (err, db) {
