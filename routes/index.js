@@ -7,6 +7,7 @@ var _ = require('underscore');
 var _ = require('lodash');
 var unzip = require('unzip');
 var assert = require('assert');
+
 var MongoClient = require('mongodb').MongoClient
 var schedule = require('node-schedule');
 var mkdirp = require('mkdirp')
@@ -20,7 +21,7 @@ var config = require("../js/config");
 var constants = require("../js/constants");
 var lib = require('../js/library')
 var middleware = require('../js/middleware')
-
+var schema = require('../js/schema')
 var dir = process.cwd();
 
 
@@ -498,7 +499,6 @@ router.post('/uploadfile', function (req, res) {
       data.secretKey = secretKey.toString();
       data.upload_time = Date();
       if ("secret" in formData && formData.secret != '') {
-        console.log("here")
         data.accessSecret = md5(formData.secret)
       }
       data.visiterId = formData.visiterId
