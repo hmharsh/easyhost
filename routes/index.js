@@ -23,6 +23,12 @@ var lib = require('../js/library')
 var middleware = require('../js/middleware')
 var schema = require('../js/schema')
 var dir = process.cwd();
+const SimpleNodeLogger = require('simple-node-logger'),
+  opts = {
+    logFilePath: 'mylogfile.log',
+    timestampFormat: 'YYYY-MM-DD HH:mm:ss.SSS'
+  },
+  log = SimpleNodeLogger.createSimpleLogger(opts);
 
 const visits = mongoose.model("visits", schema.visitSchema);
 const homevisits = mongoose.model("homevisits", schema.visitSchema);
@@ -32,7 +38,6 @@ mongoose.connect(config.MongoURL, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
-
 
 router.get('/', function (req, res, next) {
   res.send("index.html")
@@ -55,7 +60,7 @@ router.get('/hosteditems', middleware.checkToken, async function (req, res, next
   try {
     res.send(hosteditemInfo);
   } catch (err) {
-    console.log(err)
+    log.error(err)
     res.status(500).send(err);
   }
 });
@@ -65,7 +70,7 @@ router.get('/gethomevisits', middleware.checkToken, async function (req, res) {
   try {
     res.send(homevisitsInfo);
   } catch (err) {
-    console.log(err)
+    log.error(err)
     res.status(500).send(err);
   }
 });
@@ -76,7 +81,7 @@ router.get('/gethomevisits/:visiterId', middleware.checkToken, async function (r
   try {
     res.send(homevisitsInfo);
   } catch (err) {
-    console.log(err)
+    log.error(err)
     res.status(500).send(err);
   }
 });
@@ -86,7 +91,7 @@ router.get('/alldata', middleware.checkToken, async function (req, res, next) {
   try {
     res.send(visitsInfo);
   } catch (err) {
-    console.log(err)
+    log.error(err)
     res.status(500).send(err);
   }
 });
@@ -109,7 +114,7 @@ router.get('/visits/:id', async function (req, res) {
       res.sendStatus(500)
     }
   } catch (err) {
-    console.log(err)
+    log.error(err)
     res.status(500).send(err);
   }
 });
@@ -126,7 +131,7 @@ router.post('/files/requiresecret/:id', async function (req, res) {
     }
     res.send(requestData)
   } catch (err) {
-    console.log(err)
+    log.error(err)
     res.status(500).send(err);
   }
 })
@@ -208,12 +213,12 @@ router.post('/homevisits', async function (req, res) {
 
     if (pastInfo.length == 0) {
       await data.save();
-      console.log('Inserted visit info about -> ' + req.body.url + ' successfully!! with uid: ' + req.body.uid);
+      log.info('Inserted visit info about -> ' + req.body.url + ' successfully!! with uid: ' + req.body.uid);
     }
 
     res.send(req.body.uid)
   } catch (err) {
-    console.log(err)
+    log.error(err)
     res.status(500).send(err);
   }
 })
@@ -243,12 +248,12 @@ router.post('/visiterInfo', async function (req, res) {
     ])
     if (pastInfo.length == 0) {
       await data.save();
-      console.log('Inserted visit info  -> ' + req.body.url);
+      log.info('Inserted visit info  -> ' + req.body.url);
     }
     hosteditems.updateOne({ 'uid': req.body.uid }, { $set: { 'lastAccess': Date.now() } })
     res.send(req.body)
   } catch (err) {
-    console.log(err)
+    log.error(err)
     res.status(500).send(err);
   }
 });
@@ -259,20 +264,20 @@ router.get('/delete/:id', async function (req, res, next) {
   try {
     if (hosteditemsInfo.length > 0) {
       if (hosteditemsInfo[0].stype == "File hosting") {
-        rimraf(path(__dirname, '../public', 'uploads', hosteditemsInfo[0].uid.toString()), function () { console.log("directory cleanup on delete for info of uid: " + hosteditemsInfo[0].uid.toString()); })
-        rimraf(path(__dirname, '../public', 'uploads', hosteditemsInfo[0].uid.toString() + ".zip"), function () { console.log("zip file cleanup on delete for info of uid: " + hosteditemsInfo[0].uid.toString()); })
+        rimraf(path(__dirname, '../public', 'uploads', hosteditemsInfo[0].uid.toString()), function () { log.info("directory cleanup on delete for info of uid: " + hosteditemsInfo[0].uid.toString()); })
+        rimraf(path(__dirname, '../public', 'uploads', hosteditemsInfo[0].uid.toString() + ".zip"), function () { log.info("zip file cleanup on delete for info of uid: " + hosteditemsInfo[0].uid.toString()); })
       }
       await hosteditems.deleteOne({ 'uid': hosteditemsInfo[0].uid })
-      console.log("deleted db entry of uid: " + hosteditemsInfo[0].uid.toString());
+      log.info("deleted db entry of uid: " + hosteditemsInfo[0].uid.toString());
       await visits.remove({ 'uid': hosteditemsInfo[0].uid })
-      console.log("deleted visits of uid: " + hosteditemsInfo[0].uid.toString())
+      log.info("deleted visits of uid: " + hosteditemsInfo[0].uid.toString())
       res.send("files deleted succcessfully!!")
 
     } else {
       res.redirect(constants.values.notFoundPage)
     }
   } catch (err) {
-    console.log(err)
+    log.error(err)
     res.status(500).send(err);
   }
 });
@@ -294,7 +299,7 @@ router.post('/uploadfile', function (req, res) {
       formData[name] = value
     });
     form.on('error', function (err) {
-      console.log('Error: \n' + err);
+      log.error(err);
     });
     form.on('end', async function () {
       var hdata = {}; // hosting data
@@ -318,7 +323,7 @@ router.post('/uploadfile', function (req, res) {
     form.parse(req);
   }
   catch (e) {
-    console.log(e)
+    log.error(e)
     res.sendStatus(500)
   }
 });
@@ -348,7 +353,7 @@ router.post('/files/:id', async function (req, res) {
       res.sendStatus(404) // in case if file is already deleted
     }
   } catch (err) {
-    console.log(err)
+    log.error(err)
     res.status(500).send(err);
   }
 
@@ -361,7 +366,7 @@ router.post('/files/:id', async function (req, res) {
           // Wait till zip get file extracted
           stream.on('close', () => {
             setTimeout(function () {
-              rimraf(dirpath, function () { console.log("data directory cleaned up, path: " + dirpath); })
+              rimraf(dirpath, function () { log.info("data directory cleaned up, path: " + dirpath); })
             }, config.storeExtractedFileTime);
             serveFiles()
           });
@@ -381,7 +386,7 @@ router.post('/files/:id', async function (req, res) {
     if (query) currentDir = path(dir, query);
     fs.readdir(currentDir, function (err, files) {
       if (err) {
-        console.log(err)
+        log.error(err)
         res.redirect(constants.values.notFoundPage)
       }
       var data = [];
@@ -399,7 +404,7 @@ router.post('/files/:id', async function (req, res) {
               data.push({ Name: file, Ext: ext, IsDirectory: false, Path: path(query, file) });
             }
           } catch (e) {
-            console.log(e);
+            log.error(e);
             res.sendStatus(500)
           }
         });
