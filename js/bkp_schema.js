@@ -20,10 +20,10 @@ module.exports = {
             "type": "String"
         },
         "windowWidth": {
-            "type": "String"
+            "type": "Date"
         },
         "windowHeight": {
-            "type": "String"
+            "type": "Date"
         },
         "colorDepth": {
             "type": "String"
@@ -32,25 +32,25 @@ module.exports = {
             "type": "String"
         },
         "screenWidth": {
-            "type": "String"
+            "type": "Date"
         },
         "screenHeight": {
-            "type": "String"
+            "type": "Date"
         },
         "availableWidth": {
-            "type": "String"
+            "type": "Date"
         },
         "availableHeight": {
-            "type": "String"
+            "type": "Date"
         },
         "url": {
-            "type": "String"
+            "type": "Date"
         },
         "os": {
             "type": "String"
         },
         "Browser": {
-            "type": "String"
+            "type": "Date"
         },
         "Mobile": {
             "type": "String"
@@ -62,13 +62,13 @@ module.exports = {
             "type": "String"
         },
         "hardwareConcurrency": {
-            "type": "String"
+            "type": "Date"
         },
         "maxTouchPoints": {
-            "type": "String"
+            "type": "Date"
         },
         "zoomLevel": {
-            "type": "String"
+            "type": "Date"
         },
         "supportFullCss3": {
             "type": "String"
@@ -77,7 +77,7 @@ module.exports = {
             "type": "String"
         },
         "previousSites": {
-            "type": "String"
+            "type": "Date"
         },
         "javaEnabled": {
             "type": "String"
@@ -104,10 +104,10 @@ module.exports = {
             "type": "String"
         },
         "redirectStart": {
-            "type": "String"
+            "type": "Date"
         },
         "redirectEnd": {
-            "type": "String"
+            "type": "Date"
         },
         "fetchStart": {
             "type": "String"
@@ -125,7 +125,7 @@ module.exports = {
             "type": "String"
         },
         "secureConnectionStart": {
-            "type": "String"
+            "type": "Date"
         },
         "requestStart": {
             "type": "String"
@@ -140,22 +140,22 @@ module.exports = {
             "type": "String"
         },
         "domInteractive": {
-            "type": "String"
+            "type": "Date"
         },
         "domContentLoadedEventStart": {
-            "type": "String"
+            "type": "Date"
         },
         "domContentLoadedEventEnd": {
-            "type": "String"
+            "type": "Date"
         },
         "domComplete": {
-            "type": "String"
+            "type": "Date"
         },
         "loadEventStart": {
-            "type": "String"
+            "type": "Date"
         },
         "loadEventEnd": {
-            "type": "String"
+            "type": "Date"
         },
         "jsHeapSizeLimit": {
             "type": "String"
@@ -167,13 +167,13 @@ module.exports = {
             "type": "String"
         },
         "domainLookupTimeInMs": {
-            "type": "String"
+            "type": "Date"
         },
         "loadTimeTimeInMs": {
-            "type": "String"
+            "type": "Date"
         },
         "domContentLoadTimeInMs": {
-            "type": "String"
+            "type": "Date"
         },
         "localIpv4": {
             "type": "String"
@@ -188,16 +188,16 @@ module.exports = {
             "type": "String"
         },
         "stime": {
-            "type": "String"
+            "type": "Date"
         },
         "remoteAddress": {
-            "type": "String"
+            "type": "Date"
         },
         "remotePort": {
             "type": "Number"
         },
         "localAddress": {
-            "type": "String"
+            "type": "Date"
         },
         "localPort": {
             "type": "Number"
@@ -211,16 +211,13 @@ module.exports = {
             "type": "String"
         },
         "lastAccess": {
-            "type": "String"
+            "type": "ObjectId"
         },
         "secretKey": {
             "type": "String"
         },
         "upload_time": {
-            "type": "String"
-        },
-        "accessSecret": {
-            "type": "String"
+            "type": "Date"
         },
         "visiterId": {
             "type": "String"

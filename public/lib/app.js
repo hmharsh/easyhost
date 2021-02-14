@@ -136,6 +136,8 @@
       error: function (err) {
         if (err.status == 410) {
           $('#secretValidator').html("please enter valid password")
+        } else if (err.status == 404) {
+          alert("File deleted from the server")
         } else {
           $('#secretValidator').html("no data available")
         }

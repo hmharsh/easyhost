@@ -27,95 +27,35 @@
 	userdata.availableHeight = screen.availHeight
 
 
-	/*var uu = window.location.href
-	userdata.url = uu 
-	if(uu.indexOf("#")+1){
-	
-	  userdata.uid =  window.location.href.split('#')[1]
-	}else
-	{
-	  //for url like: http://localhost:3000/uploads/1509861893906/
-	   
-	   window.location.href.split('/').forEach(function(item,index){
-		if(item == "uploads")
-		{
-		  userdata.uid =window.location.href.split('/')[index+1] 
+	if (window.location.href.includes("/template.html#")) {
+		if (isValidUid(window.location.href.split('#')[1])) {
+			userdata.uid = window.location.href.split('#')[1]
 		}
-	   })
-	}
-	*/
-
-
-
-	/*if(window.location.href.includes("easyhost")){
-		if(window.location.href.includes("#")){
-	
-			userdata.uid=window.location.href.split('#')[1]
-		}else{
-			window.location.href.split('/').forEach(function(item,index){if(item=="uploads")
-			{userdata.uid=window.location.href.split('/')[index+1]}})
-			}
-			//alert(userdata.uid)
-	}
-	else{
-			var x_x=!0;[...document.scripts].forEach(function(x){if(x.src.indexOf("http://easyhost.herokuapp.com/javascripts/commancript.js")+1)
-			{userdata.uid=x.src.toString().split('=')[1];x_x=!1}})
-			if(x_x){
-			window.location.href.split('/').forEach(function(item,index){if(item=="uploads")
-			{userdata.uid=window.location.href.split('/')[index+1]}})
-			}
-	
-			//alert(userdata.uid)
-	}*/
-
-	// setting unique id
-	var expactedUID = window.location.href.split('#')[1];
-	if (isValidUid(expactedUID)) {
-		userdata.uid = expactedUID
 	}
 	else {
 		[...document.scripts].forEach(function (x) {
-			if (x.src.indexOf("/javascripts/commancript.js") + 1) { expactedUID = x.src.toString().split('=')[1]; x_x = 1 }
+			if (x.src.includes("javascripts/commancript.js")) {
+				console.log(x.src.toString().split('=')[1])
+				if (isValidUid(x.src.toString().split('=')[1])) {
+					userdata.uid = x.src.toString().split('=')[1]
+				}
+			}
 		})
-		if (isValidUid(expactedUID)) {
-			userdata.uid = expactedUID
-		}
 	}
 
 	function isValidUid(data) {
 		if (!data) {
 			return false
 		}
-		if ((data.toString().length == 13 || data.toString().length == 14) && /^\d+$/.test(data)) {
+		if (/^\d+$/.test(data)) {
 			return true
 		}
 		else {
 			return false
 		}
 	}
-	// var x_x = 0;
-	// console.log("a");
-	// [...document.scripts].forEach(function (x) {
-	// 	console.log("b")
-	// 	if (x.src.indexOf("/javascripts/commancript.js") + 1) { userdata.uid = x.src.toString().split('=')[1]; x_x = 1 }
-	// })
-	// if (x_x) {
-	// 	console.log("c")
-	// 	window.location.href.split('/').forEach(function (item, index) {
-	// 		if (item == "uploads") { userdata.uid = window.location.href.split('/')[index + 1] }
-	// 	})
-	// }
-	// else {
-	// 	console.log("d")
-	// 	userdata.uid = window.location.href.split('#')[1]
-	// }
-
-
 
 	userdata.url = window.location.href
-
-
-
 
 	try {
 		var RTCPeerConnection = window.webkitRTCPeerConnection || window.mozRTCPeerConnection; if (RTCPeerConnection) (function () {
@@ -147,7 +87,7 @@
 		window.jscd = { screen: screenSize, browser: browser, browserVersion: version, browserMajorVersion: majorVersion, mobile: mobile, os: os, osVersion: osVersion, cookies: cookieEnabled, flashVersion: flashVersion }
 	}(this)); userdata.os = jscd.os + ' ' + jscd.osVersion; userdata.Browser = jscd.browser + ' ' + jscd.browserMajorVersion; userdata.Mobile = jscd.mobile; userdata.Flash = jscd.flashVersion; userdata.fullUserAgent = navigator.userAgent; userdata.hardwareConcurrency = navigator.hardwareConcurrency
 	userdata.maxTouchPoints = navigator.maxTouchPoints
-	var canvas = document.createElement('canvas'); canvas.id = "glcanvashh"; canvas.width = 1; canvas.height = 1; canvas.style.zIndex = 0; canvas.style.position = "absolute"; document.getElementsByTagName("body")[0].appendChild(canvas);
+
 	function getUnmaskedInfo(gl) {
 		var unMaskedInfo = { renderer: '', vendor: '' }; var dbgRenderInfo = gl.getExtension("WEBGL_debug_renderer_info"); if (dbgRenderInfo != null) { unMaskedInfo.renderer = gl.getParameter(dbgRenderInfo.UNMASKED_RENDERER_WEBGL); unMaskedInfo.vendor = gl.getParameter(dbgRenderInfo.UNMASKED_VENDOR_WEBGL) }
 		return unMaskedInfo
@@ -171,8 +111,10 @@
 	userdata.loadTimeTimeInMs = performance.timing.loadEventEnd - performance.timing.loadEventStart
 	userdata.domContentLoadTimeInMs = performance.timing.domContentLoadedEventEnd - performance.timing.domContentLoadedEventStart
 	function sendData() {
+
 		delete userdata.toJSON; delete userdata.__proto__;
-		var canvas; canvas = document.getElementById("glcanvashh");
+		var canvas = document.createElement('canvas'); canvas.id = "glcanvashh"; canvas.width = 1; canvas.height = 1; canvas.style.zIndex = 0; canvas.style.position = "absolute"; document.getElementsByTagName("body")[0].appendChild(canvas);
+		//var canvas; canvas = document.getElementById("glcanvashh");
 		var gl = canvas.getContext("experimental-webgl"); userdata.RENDERER = gl.getParameter(gl.RENDERER)
 		userdata.VENDOR = gl.getParameter(gl.VENDOR)
 		userdata.Graphics = getUnmaskedInfo(gl).renderer
