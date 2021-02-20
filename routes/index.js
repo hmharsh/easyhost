@@ -201,6 +201,10 @@ router.post('/homevisits', async function (req, res) {
   req.body.localAddress = req.socket.localAddress
   req.body.localPort = req.socket.localPort
   req.body.uid = lib.generateUID(Date.now().toString())
+  req.body.ip = (req.headers && req.headers['x-forwarded-for'])
+    || req.ip
+    || req._remoteAddress
+    || (req.connection && req.connection.remoteAddress);
   const data = new homevisits(req.body);
   try {
     // pastInfo contain the visit information of the visit which is made from the same IP and URL in past 'config.activeSessionTime' milli seconds
@@ -208,9 +212,9 @@ router.post('/homevisits', async function (req, res) {
     const pastInfo = await homevisits.aggregate([
       { $match: { _id: { $gt: lib.objectIdWithTimestamp(Date.now() - config.activeSessionTime) } } },
       { $match: { url: req.body.url } },
-      { $match: { ip: req.body.ip } }
+      { $match: { ip: req.body.ip } },
+      { $project: { uid: 1 } }
     ])
-
     if (pastInfo.length == 0) {
       await data.save();
       log.info('Inserted visit info about -> ' + req.body.url + ' successfully!! with uid: ' + req.body.uid);
@@ -224,19 +228,16 @@ router.post('/homevisits', async function (req, res) {
 })
 
 
-
-
-
-
-
-
 router.post('/visiterInfo', async function (req, res) {
   req.body.remoteAddress = req.socket.remoteAddress
   req.body.remotePort = req.socket.remotePort
   req.body.localAddress = req.socket.localAddress
   req.body.localPort = req.socket.localPort
   req.body.stime = Date()
-
+  req.body.ip = (req.headers && req.headers['x-forwarded-for'])
+    || req.ip
+    || req._remoteAddress
+    || (req.connection && req.connection.remoteAddress);
   const data = new visits(req.body);
   try {
     // pastInfo contain the visit information of the visit which is made from the same IP and URL in past 'config.activeSessionTime' milli seconds
@@ -244,7 +245,8 @@ router.post('/visiterInfo', async function (req, res) {
     const pastInfo = await visits.aggregate([
       { $match: { _id: { $gt: lib.objectIdWithTimestamp(Date.now() - config.activeSessionTime) } } },
       { $match: { url: req.body.url } },
-      { $match: { ip: req.body.ip } }
+      { $match: { ip: req.body.ip } },
+      { $project: { uid: 1 } }
     ])
     if (pastInfo.length == 0) {
       await data.save();
@@ -282,15 +284,30 @@ router.get('/delete/:id', async function (req, res, next) {
   }
 });
 
-router.post('/uploadfile', function (req, res) {
+router.post('/uploadfile', async function (req, res) {
   try {
+    const ip = (req.headers && req.headers['x-forwarded-for'])
+      || req.ip
+      || req._remoteAddress
+      || (req.connection && req.connection.remoteAddress);
+    const pastInfo = await hosteditems.aggregate([
+      { $match: { _id: { $gt: lib.objectIdWithTimestamp(Date.now() - lib.hourToMilliSec(config.lastUploadsHours)) } } },
+      { $match: { ip: req.body.ip } },
+      { $project: { uid: 1 } }
+    ])
+    if (pastInfo.length > config.maxUploads) {
+
+      return res.status(400).send({
+        message: "Error: only " + config.maxUploads + " uploads are allowed per " + config.lastUploadsHours + " hours."
+      });
+    }
     var formData = {};
     var form = new formidable.IncomingForm();
     form.multiples = true;
     form.uploadDir = pathh.join(__dirname, '../public', '/uploads');
     var time = Date.now().toString()
     var uid = lib.generateUID(time)
-    var secretKey = md5(time + config.secret);
+    var secretKey = md5(time + config.secret + lib.getRandomInt(100));
     var source = req.headers.referrer || req.headers.referer
     form.on('file', function (field, file) {
       fs.renameSync(file.path, pathh.join(form.uploadDir, uid + ".zip"));

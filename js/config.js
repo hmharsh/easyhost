@@ -7,4 +7,12 @@ module.exports = {
     MongoURL: 'mongodb+srv://admin:XZTBs7HpGagquE8u@easyhost.fyfkv.mongodb.net/easyhost', // connection string suffix with database name
     activeSessionTime: 300000, // Time difference in milli seconds, to prevent store visit info from same source untill this duration, this will help prevent storing similar information on page reloads
     storeExtractedFileTime: 120000,// How long shared zip's extracted file should be stored on backend (they will extracted again on next visit or page reload) in milli seconds
+
+    // Allow only `maxUploads` per `lastUploadsHours`, eg to allow 5 uploads per user per 24 hours maxUploads=5 and lastUploadsHours=24
+    maxUploads: 8,
+    lastUploadsHours: 24,
+
+    // Allow only `maxCreadentials` per `lastCreadentialsHours`
+    maxCreadentials: 5,
+    lastCreadentialsHours: 24
 };

@@ -324,7 +324,7 @@ $('#custom').modal('show');">Track your own website with Easyhost</button>
         downloadLink.click();
       }
       $('#uploadBtn').on('click', function (evt) {
-
+        $('.progress-bar').hide()
         $('#secretValidator').html("")
         $('#isSecret').prop('checked', false);
 
@@ -367,7 +367,8 @@ $('#custom').modal('show');">Track your own website with Easyhost</button>
                       //alert(data)
                       $('#totalsize').html("Public link to share : </br><pre>" + data.split('+')[0] + "</pre></br>Private Dashboard link : </br><pre>" + data.split('+')[1] + "</pre></br>Delete uploaded data using:</br><pre>" + data.split('+')[2] + "</pre>")
                     },
-                    xhr: function () {
+                    xhr: function (data) {
+                      $('.progress-bar').show()
                       var xhr = new XMLHttpRequest();
                       xhr.upload.addEventListener('progress', function (evt) {
                         if (evt.lengthComputable) {
@@ -382,6 +383,9 @@ $('#custom').modal('show');">Track your own website with Easyhost</button>
                         }
                       }, false);
                       return xhr;
+                    },
+                    error: function (data) {
+                      $('#totalsize').text(data.responseText)
                     }
                   });
                 });

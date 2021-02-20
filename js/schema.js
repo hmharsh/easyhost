@@ -205,6 +205,9 @@ module.exports = {
         "uid": {
             "type": "String"
         },
+        "ip": {
+            "type": "String"
+        },
     }),
     hostedItemSchema: new mongoose.Schema({
         "uid": {

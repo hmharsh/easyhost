@@ -10,8 +10,6 @@ login feature
  To do 
  - limit number of link generation per host per n hours 
  - history clean up a constant diferent for both hosted item and script tag
- - enhance logging (with right logging package)
- - backend code sanity
 
 UI
 - correct links (href) rg dashboard links from UI (admin pages)

@@ -1,3 +1,6 @@
+function hourToMilliSec(hours) {
+  return hours * 60 * 60 * 1000
+}
 function generateUID(timestamp) {
   // Make sure event if two items are uploaded on same time have different uid, with two extra random digits are associated
   return timestamp + getRandomInt(9).toString() + getRandomInt(9).toString()
@@ -23,3 +26,5 @@ function getRandomInt(max) {
 
 module.exports.objectIdWithTimestamp = objectIdWithTimestamp
 module.exports.generateUID = generateUID
+module.exports.hourToMilliSec = hourToMilliSec
+module.exports.getRandomInt = getRandomInt
