@@ -246,12 +246,17 @@ $('#custom').modal('show');">Track your own website with Easyhost</button>
     $("#genCredBtn").click(function () {
       document.getElementById("custominfo").innerHTML = "Please wait...";
       $.post("/issuecredentials", { visiterId: localStorage.getItem('visitId') }, function (result) {
-        $("#custominfo").html("Script Tag to inclide in webpage :</br><pre>" +
-          result.split('+')[1] +
-          "</pre> </br>" +
-          "Dashboard link : </br><pre>" +
-          result.split('+')[0] + "</pre><br>" + "Delete:</br><pre>" + result.split('+')[0].replace("table", "delete") + "</pre><br>" + "<h6>*Tracking will only work over https</h6>"
-        );
+        if (result.includes("Error")) {
+          $("#custominfo").html(result.split('+')[1])
+        }
+        else {
+          $("#custominfo").html("Script Tag to inclide in webpage :</br><pre>" +
+            result.split('+')[1] +
+            "</pre> </br>" +
+            "Dashboard link : </br><pre>" +
+            result.split('+')[0] + "</pre><br>" + "Delete:</br><pre>" + result.split('+')[0].replace("table", "delete") + "</pre><br>" + "<h6>*Tracking will only work over https</h6>"
+          );
+        }
       });
       $("#genCredBtn").hide()
     });
@@ -273,6 +278,7 @@ $('#custom').modal('show');">Track your own website with Easyhost</button>
           }
         }
         $('#totalsize').text("Total size : " + parseFloat(total_size / 1024).toFixed(2) + " KB")
+
         var fileSize = this.files[0].size / 1024 / 1024;
         $('#filesize').val(fileSize)
         $('#lastupdate').val(this.files[0].lastModified)
@@ -294,6 +300,7 @@ $('#custom').modal('show');">Track your own website with Easyhost</button>
 
 
         $('#myModa').modal('show');
+
       });
     });
     $(document).ready(function () {
@@ -385,6 +392,7 @@ $('#custom').modal('show');">Track your own website with Easyhost</button>
                       return xhr;
                     },
                     error: function (data) {
+                      $('.progress-bar').hide()
                       $('#totalsize').text(data.responseText)
                     }
                   });

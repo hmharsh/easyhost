@@ -196,12 +196,6 @@ module.exports = {
         "remotePort": {
             "type": "Number"
         },
-        "localAddress": {
-            "type": "String"
-        },
-        "localPort": {
-            "type": "Number"
-        },
         "uid": {
             "type": "String"
         },
@@ -229,6 +223,9 @@ module.exports = {
             "type": "String"
         },
         "stype": {
+            "type": "String"
+        },
+        "ip": {
             "type": "String"
         }
 

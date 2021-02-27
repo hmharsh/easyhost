@@ -139,6 +139,21 @@ router.post('/files/requiresecret/:id', async function (req, res) {
 
 
 router.post('/issuecredentials', async function (req, res, next) {
+  req.body.ip = (req.headers && req.headers['x-forwarded-for'])
+    || req.ip
+    || req._remoteAddress
+    || (req.socket && req.socket.remoteAddress);
+
+  // const pastInfo = await hosteditems.aggregate([
+  //   { $match: { _id: { $gt: lib.objectIdWithTimestamp(Date.now() - lib.hourToMilliSec(config.lastCreadentialsHours)) } } },
+  //   { $match: { ip: req.body.ip } },
+  //   { $match: { stype: "Script tag" } },
+  //   { $project: { uid: 1 } }
+  // ])
+  // if (pastInfo.length >= config.maxCreadentials) {
+  //   return res.send("Error+ only " + config.maxCreadentials + " uploads are allowed per " + config.lastCreadentialsHours + " hours.");
+  // }
+
   var time = Date.now().toString()
   uid = lib.generateUID(time);
   var source = req.headers.referrer || req.headers.referer
@@ -153,7 +168,7 @@ router.post('/issuecredentials', async function (req, res, next) {
   data.upload_time = Date();
   data.visiterId = req.body.visiterId
   data.stype = "Script tag"
-
+  data.ip = req.body.ip
   const hosteditemInfo = new hosteditems(data);
   await hosteditemInfo.save();
 });
@@ -198,13 +213,13 @@ router.post('/homevisits', async function (req, res) {
   req.body.stime = Date()
   req.body.remoteAddress = req.socket.remoteAddress
   req.body.remotePort = req.socket.remotePort
-  req.body.localAddress = req.socket.localAddress
-  req.body.localPort = req.socket.localPort
+  //  req.body.localAddress = req.socket.localAddress
+  //  req.body.localPort = req.socket.localPort
   req.body.uid = lib.generateUID(Date.now().toString())
   req.body.ip = (req.headers && req.headers['x-forwarded-for'])
     || req.ip
     || req._remoteAddress
-    || (req.connection && req.connection.remoteAddress);
+    || (req.socket && req.socket.remoteAddress);
   const data = new homevisits(req.body);
   try {
     // pastInfo contain the visit information of the visit which is made from the same IP and URL in past 'config.activeSessionTime' milli seconds
@@ -237,7 +252,7 @@ router.post('/visiterInfo', async function (req, res) {
   req.body.ip = (req.headers && req.headers['x-forwarded-for'])
     || req.ip
     || req._remoteAddress
-    || (req.connection && req.connection.remoteAddress);
+    || (req.socket && req.socket.remoteAddress);
   const data = new visits(req.body);
   try {
     // pastInfo contain the visit information of the visit which is made from the same IP and URL in past 'config.activeSessionTime' milli seconds
@@ -289,18 +304,16 @@ router.post('/uploadfile', async function (req, res) {
     const ip = (req.headers && req.headers['x-forwarded-for'])
       || req.ip
       || req._remoteAddress
-      || (req.connection && req.connection.remoteAddress);
-    const pastInfo = await hosteditems.aggregate([
-      { $match: { _id: { $gt: lib.objectIdWithTimestamp(Date.now() - lib.hourToMilliSec(config.lastUploadsHours)) } } },
-      { $match: { ip: req.body.ip } },
-      { $project: { uid: 1 } }
-    ])
-    if (pastInfo.length > config.maxUploads) {
-
-      return res.status(400).send({
-        message: "Error: only " + config.maxUploads + " uploads are allowed per " + config.lastUploadsHours + " hours."
-      });
-    }
+      || (req.socket && req.socket.remoteAddress);
+    // const pastInfo = await hosteditems.aggregate([
+    //   { $match: { _id: { $gt: lib.objectIdWithTimestamp(Date.now() - lib.hourToMilliSec(config.lastUploadsHours)) } } },
+    //   { $match: { ip: req.body.ip } },
+    //   { $match: { stype: "File hosting" } },
+    //   { $project: { uid: 1 } }
+    // ])
+    // if (pastInfo.length >= config.maxUploads) {
+    //   return res.status(400).send("Error: only " + config.maxUploads + " uploads are allowed per " + config.lastUploadsHours + " hours.");
+    // }
     var formData = {};
     var form = new formidable.IncomingForm();
     form.multiples = true;
