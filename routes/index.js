@@ -220,7 +220,14 @@ router.post('/homevisits', async function (req, res) {
     || req.ip
     || req._remoteAddress
     || (req.socket && req.socket.remoteAddress);
+  if (req.headers && req.headers['x-forwarded-for']) {
+    req.body.isProxy = true
+  } else {
+    req.body.isProxy = false
+  }
+
   const data = new homevisits(req.body);
+
   try {
     // pastInfo contain the visit information of the visit which is made from the same IP and URL in past 'config.activeSessionTime' milli seconds
     // to make sure same visit information not inserted on page reloads
@@ -230,12 +237,15 @@ router.post('/homevisits', async function (req, res) {
       { $match: { ip: req.body.ip } },
       { $project: { uid: 1 } }
     ])
+    uid = ""
     if (pastInfo.length == 0) {
       await data.save();
       log.info('Inserted visit info about -> ' + req.body.url + ' successfully!! with uid: ' + req.body.uid);
+      uid = req.body.uid
+    } else {
+      uid = pastInfo[0].uid
     }
-
-    res.send(req.body.uid)
+    res.send(uid)
   } catch (err) {
     log.error(err)
     res.status(500).send(err);
@@ -253,6 +263,11 @@ router.post('/visiterInfo', async function (req, res) {
     || req.ip
     || req._remoteAddress
     || (req.socket && req.socket.remoteAddress);
+  if (req.headers && req.headers['x-forwarded-for']) {
+    req.body.isProxy = true
+  } else {
+    req.body.isProxy = false
+  }
   const data = new visits(req.body);
   try {
     // pastInfo contain the visit information of the visit which is made from the same IP and URL in past 'config.activeSessionTime' milli seconds
@@ -286,7 +301,7 @@ router.get('/delete/:id', async function (req, res, next) {
       }
       await hosteditems.deleteOne({ 'uid': hosteditemsInfo[0].uid })
       log.info("deleted db entry of uid: " + hosteditemsInfo[0].uid.toString());
-      await visits.remove({ 'uid': hosteditemsInfo[0].uid })
+      await visits.deleteMany({ 'uid': hosteditemsInfo[0].uid })
       log.info("deleted visits of uid: " + hosteditemsInfo[0].uid.toString())
       res.send("files deleted succcessfully!!")
 

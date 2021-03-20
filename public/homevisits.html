@@ -118,7 +118,7 @@
             <th class="localIpv4">localIpv4</th>
             <th class="RENDERER">RENDERER</th>
             <th class="VENDOR">VENDOR</th>
-            <th class="Graphics">Graphics</th>
+            <th class="webKitSupport">webkit</th>
             <th class="ip">public ip</th>
             <!--  <th class = "region">region</th> -->
             <th class="org">Organization</th>
@@ -152,7 +152,18 @@
 
 
 
-
+            <th class="dataSaveMode">Data save modet</th>
+            <th class="RAM">Local RAM</th>
+            <th class="audioVideoSupport">Supported audio/video</th>
+            <th class="plugins">Plugins</th>
+            <th class="isTouchDevice">Touchscreen</th>
+            <th class="pixelRatio">Pixel ratio</th>
+            <th class="adBlockEnabled">Adblock enabled</th>
+            <th class="btPercent">Battery</th>
+            <th class="btDischargeMin">Discharge min</th>
+            <th class="btChargeMin">Charge min</th>
+            <th class="isBtCharging">Charging</th>
+            <th class="isProxy">Proxied</th>
 
 
 
@@ -238,7 +249,7 @@ unloadEventStart
             <td class="localIpv4">{{ x.localIpv4}}</td>
             <td class="RENDERER">{{ x.RENDERER}}</td>
             <td class="VENDOR">{{ x.VENDOR}}</td>
-            <td class="Graphics">{{ x.Graphics}}</td>
+            <td class="webKitSupport">{{ x.webKitSupport}}</td>
             <td class="ip">{{ x.ip}}</td>
             <!-- <td class = "region">{{ x.region}}</td> -->
             <td class="org">{{ x.org}}</td>
@@ -268,6 +279,23 @@ unloadEventStart
             <td class="remotePort">{{x.remotePort}}</td>
             <td class="localAddress">{{x.localAddress}}</td>
             <td class="localPort">{{x.localPort}}</td>
+
+
+            <td class="dataSaveMode">{{x.dataSaveMode}}</td>
+            <td class="RAM">{{x.RAM}}</td>
+            <td class="audioVideoSupport">{{x.audioVideoSupport}}</td>
+            <td class="plugins">{{x.plugins}}</td>
+            <td class="isTouchDevice">{{x.isTouchDevice}}</td>
+            <td class="pixelRatio">{{x.pixelRatio}}</td>
+            <td class="adBlockEnabled">{{x.adBlockEnabled}}</td>
+            <td class="btPercent">{{x.btPercent}}</td>
+            <td class="btDischargeMin">{{x.btDischargeMin}}</td>
+            <td class="btChargeMin">{{x.btChargeMin}}</td>
+            <td class="isBtCharging">{{x.isBtCharging}}</td>
+            <td class="isProxy">{{x.isProxy}}</td>
+
+
+
 
 
             <!--  <td class = "isProxy">{{x.isProxy}}</td>

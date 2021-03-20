@@ -184,9 +184,6 @@ module.exports = {
         "VENDOR": {
             "type": "String"
         },
-        "Graphics": {
-            "type": "String"
-        },
         "stime": {
             "type": "String"
         },
@@ -200,6 +197,42 @@ module.exports = {
             "type": "String"
         },
         "ip": {
+            "type": "String"
+        },
+        "dataSaveMode": {
+            "type": "String"
+        },
+        "RAM": {
+            "type": "String"
+        },
+        "audioVideoSupport": {
+            "type": "String"
+        },
+        "plugins": {
+            "type": "String"
+        },
+        "isTouchDevice": {
+            "type": "String"
+        },
+        "pixelRatio": {
+            "type": "String"
+        },
+        "adBlockEnabled": {
+            "type": "String"
+        },
+        "btPercent": {
+            "type": "String"
+        },
+        "btDischargeMin": {
+            "type": "String"
+        },
+        "btChargeMin": {
+            "type": "String"
+        },
+        "isBtCharging": {
+            "type": "String"
+        },
+        "webKitSupport": {
             "type": "String"
         },
     }),

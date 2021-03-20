@@ -8,16 +8,22 @@ spin up MongoDB container
 # EasyHost
 Listing below the enhancements planned from various aspects
 ## UserInfo detection enhancements
- - Audio support (email + https://stackoverflow.com/a/31647707/3386952)
- - Video support
- - Localstorage support
- - ISP information
- - Battary information (https://www.webondevices.com/9-javascript-apis-accessing-device-sensors/)
- - Installed plugin information (https://www.tutorialspoint.com/How-to-list-down-all-the-plug-in-installed-in-your-browser)
- - Ad-blocker info (https://stackoverflow.com/a/65532927/3386952)
- - navigator.deviceMemory
- - Mobile senser related info POC
- - Enhance proxy detection
+// - Audio support (email + https://stackoverflow.com/a/31647707/3386952)
+// - Video support
+//  - Installed plugin information (https://www.tutorialspoint.com/How-to-list-down-all-the-plug-in-installed-in-your-browser)
+// - Ad-blocker info (https://stackoverflow.com/a/65532927/3386952)
+//  - Battary and other (https://www.webondevices.com/9-javascript-apis-accessing-device-sensors/)
+//- navigator.deviceMemory
+// - Pixel density / Screen Ratio
+//- Touchscreen capabilities
+//- Enhance proxy detection
+
+- ISP information
+- all resource detection along with their loading time: https://stackoverflow.com/questions/20621084/how-to-get-list-of-network-requests-done-by-html
+- 
+
+
+
  
 
 

@@ -15,6 +15,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href='https://fonts.googleapis.com/css?family=Asul' rel='stylesheet'>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="javascripts/jszip.min.js"></script>
@@ -132,7 +134,7 @@
     or
     <br>
     <br>
-    <button type="button" id="track_own_web" class="btn btn-primary btn-lg" onclick="jQuery.noConflict();
+    <button type="button" id="track_own_web" class="btn btn-primary btn-lg" onclick="
 $('#custom').modal('show');">Track your own website with Easyhost</button>
   </span>
   <div class="container">
@@ -283,7 +285,7 @@ $('#custom').modal('show');">Track your own website with Easyhost</button>
         $('#filesize').val(fileSize)
         $('#lastupdate').val(this.files[0].lastModified)
         $('.filename').html(this.files[0].name)
-        jQuery.noConflict();
+        //jQuery.noConflict();
         // $('#secret').attr('type', "hidden");
         // $('#eye').hide()
         // $("#secret").val("")
@@ -407,14 +409,7 @@ $('#custom').modal('show');">Track your own website with Easyhost</button>
 
 
   </script>
-  <script src="commancript.js"></script> -->
-  <script type="text/javascript">
-    if (userdata.Mobile) {
-      alert("For better user experience use desktop!!")
-    }
-  </script>
-
-
+  <script src="commancript.js"></script>
 </body>
 
 </html>
