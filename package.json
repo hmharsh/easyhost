@@ -1,9 +1,13 @@
 {
-  "name": "websiteupload",
+  "name": "easyhost",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
+  },
+  "engines": {
+    "node": "10.19.0",
+    "npm": "7.6.3"
   },
   "dependencies": {
     "assert": "^1.4.1",
@@ -15,19 +19,19 @@
     "exec": "^0.2.1",
     "express": "^4.17.1",
     "express-file-manager": "^1.1.0",
-    "express-fileupload": "^0.1.4",
+    "express-fileupload": "^1.2.1",
     "express-handlebars": "^3.0.0",
     "express-session": "^1.17.1",
     "formidable-upload": "0.0.3",
     "ip-to-asn": "^1.0.0",
     "iplocation": "^5.0.0",
     "ipware": "^1.0.0",
-    "jade": "~1.11.0",
+    "jade": "^0.31.2",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
     "md5": "^2.2.1",
     "mkdirp": "^0.5.1",
-    "mongodb": "^2.2.33",
+    "mongodb": "^3.6.5",
     "mongodb-backup": "^1.6.9",
     "mongodb-restore": "^1.6.2",
     "mongoose": "^5.11.16",

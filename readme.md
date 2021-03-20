@@ -58,3 +58,5 @@ Listing below the enhancements planned from various aspects
 - Helm chart with config values
 - Development pipelne from git push to master (should upload the newer image), build pass, fail tag on github
 - Proper readme
+
+### Auto deploy on github master branch change enabled using heroku pipeline 
