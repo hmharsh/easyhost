@@ -60,18 +60,8 @@
           <span></span> <b class="caret"></b>
         </div>
       </div>
-      <!--   <div class = "col-md-10">
-<input type = "button" class = "btn btn-default" value = "Refresh" ng-click = "refresh()"></botton >
- <button type="button" id = "dow"  ng-click="SendData()" class="btn btn-default">Download csv</button>
-         
-</div> -->
       <h3 ng-bind="info"></h3>
     </div>
-
-
-
-    <!-- <h2><b>Visit summary of:</b> <a ng-href = {{names[0].url}}>{{names[0].url}}</a></h2><br> -->
-
     <div class="col-sm-8">
       <table class="table table-striped table-bordered" datatable="ng" dt-options="vm.dtOptions"
         dt-instance="vm.dtInstance" width="100%" dt-column-defs="vm.dtColumnDefs">
@@ -143,13 +133,6 @@
           day = ("0" + date.getDate()).slice(-2);
         return [date.getFullYear(), mnth, day].join("-");
       }
-
-      // var p = {}
-      // p["fromdate"] = convert($('#reportrange').data('daterangepicker').startDate)
-      // p["todate"] = convert($('#reportrange').data('daterangepicker').endDate)
-      // var parameter = JSON.stringify(p);
-
-
 
 
       $http({
